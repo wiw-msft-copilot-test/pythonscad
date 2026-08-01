@@ -14,8 +14,16 @@ if ("${OPENSCAD_VERSION}" STREQUAL "")
     )
     if (GIT_RESULT EQUAL 0 AND NOT "${GIT_VERSION}" STREQUAL "")
       # Remove leading 'v' if present
-      string(REGEX REPLACE "^v" "" OPENSCAD_VERSION "${GIT_VERSION}")
-      message(STATUS "Detected version from git: ${OPENSCAD_VERSION}")
+      string(REGEX REPLACE "^v" "" GIT_VERSION_STRIPPED "${GIT_VERSION}")
+      # Only use the git result if it starts with a proper version number
+      # (e.g. "0.6.0", "0.6.0-rc1+build42").  When no matching tag exists,
+      # git describe --always falls back to a bare commit hash such as
+      # "44a95ea62-dirty", which is not a valid version string and must be
+      # ignored so we can fall through to the VERSION.txt fallback below.
+      if (GIT_VERSION_STRIPPED MATCHES "^[0-9]+\\.[0-9]+")
+        set(OPENSCAD_VERSION "${GIT_VERSION_STRIPPED}")
+        message(STATUS "Detected version from git: ${OPENSCAD_VERSION}")
+      endif()
     endif()
   endif()
 
