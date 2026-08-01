@@ -4,6 +4,7 @@
 
 extends:
   - '@commitlint/config-conventional'
+  - './.commitlint-ignores.js'
 
 rules:
   # Type enum - allowed commit types
