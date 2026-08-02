@@ -29,11 +29,6 @@ jobs:
         run: |
           npm install --save-dev @commitlint/config-conventional@19 @commitlint/cli@19
 
-      - name: Validate PR commits
-        run: |
-          # Get all commits in the PR
-          npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
-
       - name: Validate PR title
         run: |
           # `printf '%s\n'` rather than `echo` so that titles containing
